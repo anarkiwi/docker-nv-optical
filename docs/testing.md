@@ -28,6 +28,7 @@ link stubs for the driver libraries. Bind mounts must come from a path the Docke
 runner's time limit; the smoke tests do not execute GPU code, so they cover the same build.
 
 `.github/workflows/release.yml` pushes `anarkiwi/nv-optical:<version>-ffmpeg` and
-`-optical` on `v*` tags, using the `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets and the
+`-optical` on `v*` tags through the `release` environment, whose secrets `DOCKERHUB_USERNAME` and
+`DOCKERHUB_TOKEN` it uses; restrict that environment to `v*` tags and require a reviewer. It builds the
 full arch list. Set the `RELEASE_RUNNER` repository variable to a larger or self-hosted runner label
 if the full build exceeds a hosted runner's limit.
