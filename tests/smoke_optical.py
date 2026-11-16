@@ -88,6 +88,24 @@ class Bindings(unittest.TestCase):
         self.assertTrue(hasattr(cv2.cuda, "GpuMat"))
 
 
+class Linkage(unittest.TestCase):
+    """Installed libraries resolve driver libraries through the loader path only."""
+
+    def test_no_stub_paths(self):
+        roots = [os.path.dirname(cv2.__file__), "/usr/local/lib"]
+        libraries = [
+            os.path.join(root, name)
+            for top in roots
+            for root, _, names in os.walk(top)
+            for name in names
+            if ".so" in name and not os.path.islink(os.path.join(root, name))
+        ]
+        self.assertTrue(libraries)
+        for library in libraries:
+            with open(library, "rb") as handle:
+                self.assertNotIn(b"/opt/nvstubs", handle.read(), library)
+
+
 class VideoIO(unittest.TestCase):
     """videoio round-trips frames through the bundled ffmpeg."""
 

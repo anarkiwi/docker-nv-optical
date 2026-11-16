@@ -54,7 +54,10 @@ change all three together.
   `libnvidia-encode`. The headers come from an MIT-licensed copy (`nvEncodeAPI.h` from
   nv-codec-headers). The `nvstubs` stage generates link-only stub libraries for them and for
   `libcuda`. No NVIDIA driver files are copied into any image; the container toolkit
-  mounts the real driver libraries at run time.
+  mounts the real driver libraries at run time. OpenCV is installed without RPATH so the
+  stubs are never found outside `optical-smoke`; `tests/smoke_optical.py` checks this.
+- The runtime images install `libegl1`, `libx11-6` and `libxext6`, which the NVIDIA Vulkan
+  ICD (`libGLX_nvidia.so.0`) needs to load.
 - `NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics` makes `--gpus` mount the NVENC/NVDEC,
   optical flow and Vulkan driver components.
 

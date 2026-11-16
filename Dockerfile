@@ -164,7 +164,7 @@ FROM devel AS opencv-build
 ARG OPENCV_VERSION
 ARG CUDA_ARCH_BIN
 ARG CUDA_ARCH_PTX
-COPY --from=ffmpeg-dist / /
+COPY --from=ffmpeg-dist /usr/local/ /usr/local/
 COPY --from=pyenv /opt/venv /opt/venv
 COPY --from=nvstubs /out/include/ /usr/local/cuda/include/
 COPY --from=nvstubs /out/lib/ /opt/nvstubs/
@@ -188,7 +188,7 @@ RUN --mount=type=cache,target=/root/.cache/opencv \
         -DBUILD_opencv_apps=OFF -DBUILD_JAVA=OFF \
         -DBUILD_opencv_python3=ON -DPYTHON3_EXECUTABLE=/opt/venv/bin/python \
         -DPYTHON3_PACKAGES_PATH="$(/opt/venv/bin/python -c 'import sysconfig; print(sysconfig.get_path("platlib"))')" \
-        -DOPENCV_GENERATE_PKGCONFIG=ON \
+        -DOPENCV_GENERATE_PKGCONFIG=ON -DCMAKE_SKIP_INSTALL_RPATH=ON \
     && cmake --build build -j"$(nproc)" \
     && DESTDIR=/out cmake --install build \
     && rm -rf /src/*
@@ -200,7 +200,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends ${RUNTIME_PACKAGES} \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=ffmpeg-dist / /
+COPY --from=ffmpeg-dist /usr/local/ /usr/local/
 RUN ldconfig && ffmpeg -hide_banner -version
 CMD ["ffmpeg", "-hide_banner", "-buildconf"]
 
@@ -211,7 +211,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends ${RUNTIME_PACKAGES} python3 \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=ffmpeg-dist / /
+COPY --from=ffmpeg-dist /usr/local/ /usr/local/
 COPY --from=pyenv /opt/venv /opt/venv
 COPY --from=opencv-build /out/ /
 ENV PATH=/opt/venv/bin:${PATH}

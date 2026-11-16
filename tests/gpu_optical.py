@@ -26,7 +26,8 @@ class Device(unittest.TestCase):
     def test_device(self):
         self.assertGreaterEqual(cv2.cuda.getCudaEnabledDeviceCount(), 1)
         info = cv2.cuda.DeviceInfo(0)
-        print(f"{info.name()} cc {info.majorVersion()}.{info.minorVersion()}")
+        cv2.cuda.printShortCudaDeviceInfo(0)
+        self.assertGreaterEqual(info.majorVersion(), 7)
         self.assertTrue(info.isCompatible())
 
 
