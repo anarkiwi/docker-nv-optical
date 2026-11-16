@@ -1,0 +1,3 @@
+ignored:
+  # SHELL with pipefail is set in the devel stage and inherited by every stage built FROM it.
+  - DL4006

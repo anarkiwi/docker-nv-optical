@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 88
+
+[tool.pylint.main]
+extension-pkg-allow-list = ["cv2"]
+
+[tool.pylint.typecheck]
+generated-members = ["cv2.*"]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint."messages control"]
+disable = ["missing-function-docstring"]
