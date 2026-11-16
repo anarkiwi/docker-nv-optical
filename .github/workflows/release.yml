@@ -17,6 +17,7 @@ jobs:
     # The full CUDA arch list may not fit a hosted runner's job time limit; set the
     # RELEASE_RUNNER repository variable to a larger or self-hosted runner label.
     runs-on: ${{ vars.RELEASE_RUNNER || 'ubuntu-latest' }}
+    environment: release
     timeout-minutes: 720
     strategy:
       max-parallel: 1
