@@ -201,6 +201,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
 RUN apt-get update && apt-get install -y --no-install-recommends ${RUNTIME_PACKAGES} \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=ffmpeg-dist /usr/local/ /usr/local/
+COPY docker/rootfs/ /
 RUN ldconfig && ffmpeg -hide_banner -version
 CMD ["ffmpeg", "-hide_banner", "-buildconf"]
 
@@ -214,6 +215,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends ${RUNTIME_PACKA
 COPY --from=ffmpeg-dist /usr/local/ /usr/local/
 COPY --from=pyenv /opt/venv /opt/venv
 COPY --from=opencv-build /out/ /
+COPY docker/rootfs/ /
 ENV PATH=/opt/venv/bin:${PATH}
 RUN ldconfig && ffmpeg -hide_banner -version && python -c "import numpy"
 CMD ["python"]

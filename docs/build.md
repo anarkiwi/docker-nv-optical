@@ -57,7 +57,9 @@ change all three together.
   mounts the real driver libraries at run time. OpenCV is installed without RPATH so the
   stubs are never found outside `optical-smoke`; `tests/smoke_optical.py` checks this.
 - The runtime images install `libegl1`, `libx11-6` and `libxext6`, which the NVIDIA Vulkan
-  ICD (`libGLX_nvidia.so.0`) needs to load.
+  ICD (`libGLX_nvidia.so.0`) needs to load. `docker/rootfs` adds the Vulkan ICD and glvnd EGL
+  vendor manifests at the paths the container toolkit mounts them to, so Vulkan works under
+  both `--gpus` (which does not mount them) and CDI (whose mounts replace them).
 - `NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics` makes `--gpus` mount the NVENC/NVDEC,
   optical flow and Vulkan driver components.
 
