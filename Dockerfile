@@ -17,7 +17,7 @@ ARG TORCHCODEC_COMMIT=d9dc54238e173000bc3969eb3959777026ff9ae8
 ARG RUNTIME_PACKAGES="libegl1 libnuma1 libvulkan1 libx11-6 libxext6"
 ARG NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics
 
-FROM nvidia/cuda:13.0.3-devel-ubuntu24.04 AS devel
+FROM nvidia/cuda:13.5.0-devel-ubuntu24.04 AS devel
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive CMAKE_GENERATOR=Ninja CMAKE_BUILD_TYPE=Release
 # hadolint ignore=DL3008
@@ -193,7 +193,7 @@ RUN --mount=type=cache,target=/root/.cache/opencv \
     && DESTDIR=/out cmake --install build \
     && rm -rf /src/*
 
-FROM nvidia/cuda:13.0.3-base-ubuntu24.04 AS ffmpeg
+FROM nvidia/cuda:13.5.0-base-ubuntu24.04 AS ffmpeg
 ARG RUNTIME_PACKAGES
 ARG NVIDIA_DRIVER_CAPABILITIES
 ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
@@ -205,7 +205,7 @@ COPY docker/rootfs/ /
 RUN ldconfig && ffmpeg -hide_banner -version
 CMD ["ffmpeg", "-hide_banner", "-buildconf"]
 
-FROM nvidia/cuda:13.0.3-runtime-ubuntu24.04 AS optical
+FROM nvidia/cuda:13.5.0-runtime-ubuntu24.04 AS optical
 ARG RUNTIME_PACKAGES
 ARG NVIDIA_DRIVER_CAPABILITIES
 ENV NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES}
